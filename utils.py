@@ -12,4 +12,3 @@ def getPenaltyMx(distance_mx):
    distance_mx[j][k] = distance2penalty(distance)
  return distance_mx
 
- 
