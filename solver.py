@@ -34,12 +34,23 @@ try:
     m.optimize()
 
     for v in m.getVars():
-        print(f"{v.VarName} = {v.X}")
+        if "Aufstellungsvariable" in v.VarName:
+            print(f"{v.VarName} = {v.X}")
     
     demand_covered = 0
     for key, var in z.items():
-        if "gedeckte Nachfrage" in var.VarName:
-            demand_covered += demand_mx[key[0]]*var.X
+        demand_covered += demand_mx[key[0]]*var.X
+    
+    cstation_served = {}
+    for Ladestation in cstations:
+        cstation_served[Ladestation] = {}
+        for key, var in z.items():
+            if key[1] == Ladestation and var.X > 0:
+                 cstation_served[Ladestation][key[0]] = demand_mx[key[0]]*var.X
+        
+
+
+    print(f"Ladestationen anteilige NF-Deckung \n {cstation_served}:")
     print(f"Gedeckte NF absolut: {demand_covered}/{sum(demand_mx)} = {demand_covered*100/sum(demand_mx)}%")
     print(f"Zielwert = {m.ObjVal}")
 
